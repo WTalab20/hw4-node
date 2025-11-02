@@ -1,11 +1,14 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:18'
-        }
-    }
+    agent any
 
     stages {
+        stage('Setup Node') {
+            steps {
+                sh 'curl -fsSL https://deb.nodesource.com/setup_18.x | bash -'
+                sh 'apt-get install -y nodejs'
+            }
+        }
+
         stage('Checkout') {
             steps {
                 checkout scm
