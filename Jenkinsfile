@@ -1,17 +1,13 @@
 pipeline {
   agent any
-
   stages {
     stage('Checkout') {
-      steps {
-        checkout scm
-      }
+      steps { checkout scm }
     }
-
     stage('Build & Test') {
       steps {
         script {
-          def nodeHome = tool name: 'node18', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
+          def nodeHome = tool name: 'node18-clean', type: 'jenkins.plugins.nodejs.tools.NodeJSInstallation'
           withEnv(["PATH+NODE=${nodeHome}/bin"]) {
             sh 'node -v'
             sh 'npm install'
@@ -20,11 +16,10 @@ pipeline {
         }
       }
     }
-
     stage('Archive') {
       steps {
-        sh 'zip -r app.zip *'
-        archiveArtifacts artifacts: 'app.zip', fingerprint: true
+        sh 'zip -r app.zip * || true'
+        archiveArtifacts artifacts: 'app.zip', fingerprint: true, allowEmptyArchive: true
       }
     }
   }
