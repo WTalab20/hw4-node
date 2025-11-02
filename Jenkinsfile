@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools {
+        nodejs "node18"
+    }
+
     stages {
         stage('Checkout') {
             steps {
@@ -8,7 +12,7 @@ pipeline {
             }
         }
 
-        stage('Build & Test') {
+        stage('Install & Test') {
             steps {
                 sh 'npm install'
                 sh 'npm test'
